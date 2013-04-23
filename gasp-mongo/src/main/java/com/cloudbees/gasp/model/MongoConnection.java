@@ -1,5 +1,7 @@
 package com.cloudbees.gasp.model;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,4 +84,19 @@ public class MongoConnection {
 		
 		return obj.get("_id").toString();	
 	}	
+	
+	public String getGaspLocations()  {
+		
+		DBCollection locations = getLocations(); 
+		 
+		// Omit object id from result
+		BasicDBObject omits = new BasicDBObject();
+		omits.put("_id",0);
+		
+		// Search by game id
+		BasicDBObject findLocations = new BasicDBObject();			
+		List<DBObject> listLocations = locations.find(findLocations, omits).limit(200).toArray();
+
+		return( listLocations.toString() );		
+	}
 }

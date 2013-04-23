@@ -19,5 +19,36 @@ public class MongoConnectionTest {
 			mongoConnection.getMongo().close();
 		}
 	}
+	
+	@Test
+	public void addGaspLocationsTest() {
+		try {
+			mongoConnection.connect();
+			System.out.println(mongoConnection.getGaspLocations());
+			// TODO
+			// Define Tests
+		}
+		catch (Exception e) {
+			fail();
+		}
+		finally {
+			mongoConnection.getMongo().close();
+		}
+	}	
 
+	@Test
+	public void getGaspLocationsTest() {
+		try {
+			mongoConnection.connect();
+			System.out.println(mongoConnection.getGaspLocations());
+			// TODO
+			// Define Tests
+		}
+		catch (Exception e) {
+			fail();
+		}
+		finally {
+			mongoConnection.getMongo().close();
+		}
+	}
 }
