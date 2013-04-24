@@ -113,7 +113,7 @@ public class LocationService extends HttpServlet {
 													 					 formattedAddress,
 													 					 theLocation);
 							mongoConnection.connect();
-							mongoConnection.newGaspLocation(gaspLocation);
+							mongoConnection.newLocation(gaspLocation);
 							
 							//We have a match: return 200 OK plus GaspLocation data
 							return Response
@@ -252,13 +252,13 @@ public class LocationService extends HttpServlet {
 	@GET
     @Path("/get")	
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getGaspLocations() {
+	public Response getLocations() {
 		StatusType statusCode = null;
 		String result = null;
 		
 		try {			
 			mongoConnection.connect();
-			result = mongoConnection.getGaspLocations();
+			result = mongoConnection.getLocations();
 			statusCode = Response.Status.OK;
 		} 
 		catch (Exception e) {

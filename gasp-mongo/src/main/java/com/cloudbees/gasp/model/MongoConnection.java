@@ -12,6 +12,7 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoURI;
 import com.mongodb.WriteConcern;
+import com.mongodb.WriteResult;
 
 
 public class MongoConnection {
@@ -49,7 +50,7 @@ public class MongoConnection {
 		return mongo;
 	}
 	
-	public DBCollection getLocations() {
+	public DBCollection getCollection() {
 		return locations;
 	}
 
@@ -71,9 +72,9 @@ public class MongoConnection {
 		}
 	}
 	
-	public String newGaspLocation( GaspLocation location ) {
+	public String newLocation( GaspLocation location ) {
 		
-		DBCollection locations = getLocations(); 
+		DBCollection locations = getCollection(); 
 
 		// Search by "name" for existing record
 		BasicDBObject searchQuery = new BasicDBObject();
@@ -91,9 +92,9 @@ public class MongoConnection {
 		return locations.findOne(searchQuery).get("_id").toString();	
 	}	
 	
-	public String getGaspLocations()  {
+	public String getLocations()  {
 		
-		DBCollection locations = getLocations(); 
+		DBCollection locations = getCollection(); 
 		 
 		// Omit object id from result
 		BasicDBObject omits = new BasicDBObject();
@@ -108,5 +109,27 @@ public class MongoConnection {
 
 		// Return the JSON string with the locations collection
 		return( listLocations.toString() );		
+	}
+	
+	public WriteResult deleteLocationByName(String name) {
+		
+		DBCollection locations = getCollection();
+		
+		BasicDBObject document = new BasicDBObject();
+		document.put("name", name);
+		return(locations.remove(document));
+	}
+	
+	public WriteResult deleteLocationByAddress(String formattedAddress) {
+		
+		DBCollection locations = getCollection();
+		
+		BasicDBObject document = new BasicDBObject();
+		document.put("formattedAddress", formattedAddress);
+		return(locations.remove(document));
+	}
+	
+	public WriteResult deleteLocations() {
+		return(locations.remove(new BasicDBObject()));
 	}
 }
