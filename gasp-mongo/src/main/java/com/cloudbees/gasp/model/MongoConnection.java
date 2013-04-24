@@ -72,7 +72,7 @@ public class MongoConnection {
 		}
 	}
 	
-	public String newLocation( GaspLocation location ) {
+	public String newLocation( Location location ) {
 		
 		DBCollection locations = getCollection(); 
 
@@ -80,16 +80,25 @@ public class MongoConnection {
 		BasicDBObject searchQuery = new BasicDBObject();
 		searchQuery.put("name", location.getName());
 		
-		// Upsert from location object
+		// Upsert from GaspLocation object
 		DBObject updateExpression = new BasicDBObject();
 		updateExpression.put("name", location.getName());
 		updateExpression.put("formattedAddress", location.getFormattedAddress());
-		updateExpression.put("lat", location.getLocation().getLat());
-		updateExpression.put("lon", location.getLocation().getLng());
+		
+		// Include Location lat/lng data
+		BasicDBObject locObj = new BasicDBObject();
+		locObj.put("lat", location.getLocation().getLat());
+		locObj.put("lng", location.getLocation().getLng());
+		updateExpression.put("location", locObj);
+		
 		locations.update(searchQuery, updateExpression, true, false);
+		String upsertId = locations.findOne(searchQuery).get("_id").toString();
+		
+		if (logger.isDebugEnabled())
+			logger.debug("addLocation(): " + upsertId);
 
 		// Return the _id field for the upserted record
-		return locations.findOne(searchQuery).get("_id").toString();	
+		return upsertId;	
 	}	
 	
 	public String getLocations()  {
@@ -105,7 +114,7 @@ public class MongoConnection {
 		List<DBObject> listLocations = locations.find(findLocations, omits).limit(200).toArray();
 
 		if (logger.isDebugEnabled())
-			logger.debug(listLocations.toString());
+			logger.debug("getLocations(): " + listLocations.toString());
 
 		// Return the JSON string with the locations collection
 		return( listLocations.toString() );		

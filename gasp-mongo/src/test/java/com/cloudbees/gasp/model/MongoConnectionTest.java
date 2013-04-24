@@ -3,33 +3,30 @@ package com.cloudbees.gasp.model;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class MongoConnectionTest {
-	private final Logger logger = LoggerFactory.getLogger(MongoConnectionTest.class);
 	
 	private final String testName = "Work";
 	private final String testName2 = "CloudBees";
 	private final String testAddress = "289 South San Antonio Road, Los Altos, CA 94022, USA";
 	private final double testLat = 37.3774655;
 	private final double testLng = -122.1139858;
-	private final Location testLocation = new Location(testLat, testLng);
-	private final GaspLocation testGaspLocation = new GaspLocation(testName, 
+	private final GeoLocation testLocation = new GeoLocation(testLat, testLng);
+	private final Location testGaspLocation = new Location(testName, 
 																   testAddress,
 																   testLocation);
-	private final GaspLocation testGaspLocation2 = new GaspLocation(testName2, 
+	private final Location testGaspLocation2 = new Location(testName2, 
 			   														testAddress,
 			   														testLocation);	
 	private final String testResult1 = "[{ \"name\" : \"Work\" , " +
 			"\"formattedAddress\" : \"289 South San Antonio Road, Los Altos, CA 94022, USA\" ," +
-			" \"lat\" : 37.3774655 , \"lon\" : -122.1139858}]";
+			" \"location\" : { \"lat\" : 37.3774655 , \"lng\" : -122.1139858}}]";
 	private final String testResult2 = "[{ \"name\" : \"Work\" , " +
-			"\"formattedAddress\" : \"289 South San Antonio Road, Los Altos, CA 94022, USA\" , " +
-			"\"lat\" : 37.3774655 , \"lon\" : -122.1139858}, " +
+			"\"formattedAddress\" : \"289 South San Antonio Road, Los Altos, CA 94022, USA\" ," +
+			" \"location\" : { \"lat\" : 37.3774655 , \"lng\" : -122.1139858}}, " +
 			"{ \"name\" : \"CloudBees\" , " +
-			"\"formattedAddress\" : \"289 South San Antonio Road, Los Altos, CA 94022, USA\" , " +
-			"\"lat\" : 37.3774655 , \"lon\" : -122.1139858}]";
+			"\"formattedAddress\" : \"289 South San Antonio Road, Los Altos, CA 94022, USA\" ," +
+			" \"location\" : { \"lat\" : 37.3774655 , \"lng\" : -122.1139858}}]";
 	private final String testResult3 = "[]";
 	
 	private MongoConnection mongoConnection = new MongoConnection();

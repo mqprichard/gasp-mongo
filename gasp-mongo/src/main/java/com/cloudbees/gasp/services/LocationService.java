@@ -15,8 +15,8 @@ import javax.ws.rs.core.Response.StatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cloudbees.gasp.model.GaspLocation;
 import com.cloudbees.gasp.model.Location;
+import com.cloudbees.gasp.model.GeoLocation;
 import com.cloudbees.gasp.model.LocationQuery;
 import com.cloudbees.gasp.model.MongoConnection;
 
@@ -103,13 +103,13 @@ public class LocationService extends HttpServlet {
 															.getResults().get(0)
 															.getGeometry()
 															.getLocation());
-							Location theLocation = gson.fromJson(json, Location.class);
+							GeoLocation theLocation = gson.fromJson(json, GeoLocation.class);
 							
 							// Get formatted address string from GeocoderResponse
 							String formattedAddress = geocoderResponse.getResults().get(0).getFormattedAddress();
 							
 							// GaspLocation is stored in Mongo and returned to the client
-							GaspLocation gaspLocation = new GaspLocation(location.getName(),
+							Location gaspLocation = new Location(location.getName(),
 													 					 formattedAddress,
 													 					 theLocation);
 							mongoConnection.connect();
@@ -222,7 +222,7 @@ public class LocationService extends HttpServlet {
 															.getResults().get(0)
 															.getGeometry()
 															.getLocation());
-							Location theLocation = gson.fromJson(json, Location.class);
+							GeoLocation theLocation = gson.fromJson(json, GeoLocation.class);
 							
 							//We have a match: return 200 OK plus location data
 							return Response
