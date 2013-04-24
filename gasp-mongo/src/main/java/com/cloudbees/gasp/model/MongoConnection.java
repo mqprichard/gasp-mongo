@@ -73,16 +73,22 @@ public class MongoConnection {
 	
 	public String newGaspLocation( GaspLocation location ) {
 		
-		DBCollection games = getLocations(); 
+		DBCollection locations = getLocations(); 
+
+		// Search by "name" for existing record
+		BasicDBObject searchQuery = new BasicDBObject();
+		searchQuery.put("name", location.getName());
 		
-		DBObject obj = new BasicDBObject();
-		obj.put("name", location.getName());
-		obj.put("address", location.getFormattedAddress());
-		obj.put("lat", location.getLocation().getLat());
-		obj.put("lng", location.getLocation().getLng());
-		games.insert(obj);
-		
-		return obj.get("_id").toString();	
+		// Upsert from location object
+		DBObject updateExpression = new BasicDBObject();
+		updateExpression.put("name", location.getName());
+		updateExpression.put("formattedAddress", location.getFormattedAddress());
+		updateExpression.put("lat", location.getLocation().getLat());
+		updateExpression.put("lon", location.getLocation().getLng());
+		locations.update(searchQuery, updateExpression, true, false);
+
+		// Return the _id field for the upserted record
+		return locations.findOne(searchQuery).get("_id").toString();	
 	}	
 	
 	public String getGaspLocations()  {
@@ -93,10 +99,14 @@ public class MongoConnection {
 		BasicDBObject omits = new BasicDBObject();
 		omits.put("_id",0);
 		
-		// Search by game id
+		// Search
 		BasicDBObject findLocations = new BasicDBObject();			
 		List<DBObject> listLocations = locations.find(findLocations, omits).limit(200).toArray();
 
+		if (logger.isDebugEnabled())
+			logger.debug(listLocations.toString());
+
+		// Return the JSON string with the locations collection
 		return( listLocations.toString() );		
 	}
 }

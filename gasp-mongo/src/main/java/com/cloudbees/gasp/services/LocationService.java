@@ -4,11 +4,13 @@ import java.util.Iterator;
 
 import javax.servlet.http.HttpServlet;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.StatusType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -245,5 +247,34 @@ public class LocationService extends HttpServlet {
 			// Return 500 Internal Server Error
     		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();		
 		}
-	}		
+	}	
+	
+	@GET
+    @Path("/get")	
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getGaspLocations() {
+		StatusType statusCode = null;
+		String result = null;
+		
+		try {			
+			mongoConnection.connect();
+			result = mongoConnection.getGaspLocations();
+			statusCode = Response.Status.OK;
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+
+			// Return 500 Internal Server Error
+    		statusCode = Response.Status.INTERNAL_SERVER_ERROR;
+		}
+		finally {
+			mongoConnection.getMongo().close();
+		}
+		
+		if (statusCode != Response.Status.OK)
+			return Response.status(statusCode).build();
+		else
+			return Response.status(statusCode).entity(result).build();
+	}	
+	
 }

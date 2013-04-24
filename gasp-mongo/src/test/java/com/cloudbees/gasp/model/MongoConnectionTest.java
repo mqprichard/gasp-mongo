@@ -21,7 +21,7 @@ public class MongoConnectionTest {
 	}
 	
 	@Test
-	public void addGaspLocationsTest() {
+	public void addGaspLocationTest() {
 		try {
 			mongoConnection.connect();
 			System.out.println(mongoConnection.getGaspLocations());
