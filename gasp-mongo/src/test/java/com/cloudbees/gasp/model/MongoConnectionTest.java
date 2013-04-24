@@ -20,13 +20,13 @@ public class MongoConnectionTest {
 			   														testLocation);	
 	private final String testResult1 = "[{ \"name\" : \"Work\" , " +
 			"\"formattedAddress\" : \"289 South San Antonio Road, Los Altos, CA 94022, USA\" ," +
-			" \"location\" : { \"lat\" : 37.3774655 , \"lng\" : -122.1139858}}]";
+			" \"location\" : { \"lng\" : -122.1139858 , \"lat\" : 37.3774655}}]";
 	private final String testResult2 = "[{ \"name\" : \"Work\" , " +
 			"\"formattedAddress\" : \"289 South San Antonio Road, Los Altos, CA 94022, USA\" ," +
-			" \"location\" : { \"lat\" : 37.3774655 , \"lng\" : -122.1139858}}, " +
+			" \"location\" : { \"lng\" : -122.1139858 , \"lat\" : 37.3774655}}, " +
 			"{ \"name\" : \"CloudBees\" , " +
 			"\"formattedAddress\" : \"289 South San Antonio Road, Los Altos, CA 94022, USA\" ," +
-			" \"location\" : { \"lat\" : 37.3774655 , \"lng\" : -122.1139858}}]";
+			" \"location\" : { \"lng\" : -122.1139858 , \"lat\" : 37.3774655}}]";
 	private final String testResult3 = "[]";
 	
 	private MongoConnection mongoConnection = new MongoConnection();

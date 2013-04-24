@@ -87,8 +87,8 @@ public class MongoConnection {
 		
 		// Include Location lat/lng data
 		BasicDBObject locObj = new BasicDBObject();
-		locObj.put("lat", location.getLocation().getLat());
 		locObj.put("lng", location.getLocation().getLng());
+		locObj.put("lat", location.getLocation().getLat());
 		updateExpression.put("location", locObj);
 		
 		locations.update(searchQuery, updateExpression, true, false);
