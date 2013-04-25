@@ -1,5 +1,6 @@
 package com.cloudbees.gasp.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -119,6 +120,34 @@ public class MongoConnection {
 		// Return the JSON string with the locations collection
 		return( listLocations.toString() );		
 	}
+
+	// db.locations.find( { location : { $within : { $center: [ [-122.1139858, 37.3774655] , 0.005 ] } } } )
+	// http://docs.mongodb.org/manual/reference/operator/center/#op._S_center
+	public String getLocationsByGeoCenter(GeoLocation center,
+										  double radius )  {
+		
+		DBCollection locations = getCollection(); 
+		locations.ensureIndex(new BasicDBObject("location", "2d"));
+		 
+		// Omit object id from result
+		BasicDBObject omits = new BasicDBObject();
+		omits.put("_id",0);
+		
+		// Perform geo-search
+		List<Object> circle = new ArrayList<Object>();
+		circle.add(new double[] { center.getLng(), center.getLat() });
+		circle.add(radius);
+		BasicDBObject query = new BasicDBObject("location", 
+				new BasicDBObject("$within", 
+						new BasicDBObject("$center", circle)));
+		List<DBObject> listLocations = locations.find(query, omits).limit(200).toArray();
+
+		if (logger.isDebugEnabled())
+			logger.debug("getLocationsByGeoCenter(): " + listLocations.toString());
+
+		// Return the JSON string with the locations collection
+		return( listLocations.toString() );		
+	}	
 	
 	public WriteResult deleteLocationByName(String name) {
 		

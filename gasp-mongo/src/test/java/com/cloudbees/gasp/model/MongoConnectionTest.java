@@ -43,6 +43,20 @@ public class MongoConnectionTest {
 			mongoConnection.getMongo().close();
 		}
 	}
+
+	@Test
+	public void geoSearchTest() {
+		try {
+			mongoConnection.connect();
+			mongoConnection.getLocationsByGeoCenter(testLocation, 0.005);
+		}
+		catch (Exception e) {
+			fail();
+		}
+		finally {
+			mongoConnection.getMongo().close();
+		}
+	}
 	
 	@Test
 	public void locationCRUDTest() {
