@@ -9,7 +9,6 @@ public class LocationQuery {
 	
 	public LocationQuery() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public LocationQuery(String name, String addressString) {
@@ -33,5 +32,4 @@ public class LocationQuery {
 	public void setAddressString(String addressString) {
 		this.addressString = addressString;
 	}
-
 }
