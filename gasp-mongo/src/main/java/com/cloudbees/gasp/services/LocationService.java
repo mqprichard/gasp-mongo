@@ -81,6 +81,57 @@ public class LocationService extends HttpServlet {
 	public Response addLocation( LocationQuery location ) {
 		try {
 			logger.debug("Name = " + location.getName());
+			logger.debug("AddressString = " + location.getAddressString());	
+			
+			GeocoderService geocoder = new GeocoderService();
+			
+			if (geocoder.callGeocoder(location)) {
+			
+				// Create a Location object from GeocoderResponse
+				Gson gson = new Gson();
+				String json = gson.toJson(geocoder.getGeocoderResponse()
+													.getResults().get(0)
+													.getGeometry()
+													.getLocation());
+				Location theLocation = gson.fromJson(json, Location.class);
+			
+				// Get formatted address string from GeocoderResponse
+				String formattedAddress = geocoder.getGeocoderResponse()
+													.getResults()
+													.get(0)
+													.getFormattedAddress();
+			
+				// GaspLocation is stored in Mongo and returned to the client
+				GeoLocation gaspLocation = new GeoLocation(location.getName(),
+									 					   formattedAddress,
+									 					   theLocation);
+				mongoConnection.connect();
+				mongoConnection.newLocation(gaspLocation);
+			
+				//We have a match: return 200 OK plus GaspLocation data
+				return Response
+						.status(Response.Status.OK)
+						.entity(new Gson().toJson(gaspLocation))
+						.build();
+			}
+			else {
+				return Response.status(geocoder.getErrorCode()).build();
+			}
+		}
+		catch (Exception e){
+			logger.error("addLocation()", e.getStackTrace());
+	    	return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();		
+		}
+	}
+	
+/*
+	@POST
+    @Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addLocation( LocationQuery location ) {
+		try {
+			logger.debug("Name = " + location.getName());
 			logger.debug("AddressString = " + location.getAddressString());
 			
 			GeocodeResponse geocoderResponse = geocodeService(location.getAddressString());
@@ -143,7 +194,8 @@ public class LocationService extends HttpServlet {
 			mongoConnection.getMongo().close();
 		}
 	}
-
+*/
+	
 	@POST
     @Path("/lookup")
 	@Consumes(MediaType.APPLICATION_JSON)
