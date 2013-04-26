@@ -44,16 +44,22 @@ public class LocationService extends HttpServlet {
                 // Create a Location object from GeocoderResponse
                 Gson gson = new Gson();
                 String json = gson.toJson(geocoder.getGeocoderResponse()
-                        .getResults().get(0).getGeometry().getLocation());
+                                                  .getResults()
+                                                  .get(0)
+                                                  .getGeometry()
+                                                  .getLocation());
                 Location theLocation = gson.fromJson(json, Location.class);
 
                 // Get formatted address string from GeocoderResponse
                 String formattedAddress = geocoder.getGeocoderResponse()
-                        .getResults().get(0).getFormattedAddress();
+                                                  .getResults()
+                                                  .get(0)
+                                                  .getFormattedAddress();
 
                 // GeoLocation is stored in Mongo and returned to the client
                 GeoLocation geoLocation = new GeoLocation(location.getName(),
-                        formattedAddress, theLocation);
+                                                          formattedAddress, 
+                                                          theLocation);
                 mongoConnection.connect();
                 mongoConnection.newLocation(geoLocation);
 
@@ -116,8 +122,12 @@ public class LocationService extends HttpServlet {
 
             GeocoderService geocoder = new GeocoderService();
             if (geocoder.callGeocoder(location)) {
-                String geoResult = geocoder.getGeocoderResponse().getResults()
-                        .get(0).getGeometry().getLocation().toString();
+                String geoResult = geocoder.getGeocoderResponse()
+                                           .getResults()
+                                           .get(0)
+                                           .getGeometry()
+                                           .getLocation()
+                                           .toString();
 
                 logger.debug("Geocoded LatLng: " + geoResult);
 

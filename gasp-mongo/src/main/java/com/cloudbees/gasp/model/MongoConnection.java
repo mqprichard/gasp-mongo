@@ -143,13 +143,16 @@ public class MongoConnection {
         List<Object> circle = new ArrayList<Object>();
         circle.add(new double[] { center.getLng(), center.getLat() });
         circle.add(radius);
-        BasicDBObject query = new BasicDBObject("location", new BasicDBObject(
-                "$within", new BasicDBObject("$center", circle)));
-        List<DBObject> listLocations = locations.find(query, omits).limit(200)
-                .toArray();
+        BasicDBObject query = new BasicDBObject(
+                                   "location", new BasicDBObject(
+                                   "$within", new BasicDBObject(
+                                   "$center", circle)));
+        List<DBObject> listLocations = locations.find(query, omits)
+                                                .limit(200)
+                                                .toArray();
 
         if (logger.isDebugEnabled()) logger.debug("getLocationsByGeoCenter(): "
-                + listLocations.toString());
+                                                  + listLocations.toString());
 
         // Return the JSON string with the locations collection
         return (listLocations.toString());

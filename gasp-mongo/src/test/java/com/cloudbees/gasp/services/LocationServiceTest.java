@@ -167,9 +167,8 @@ public class LocationServiceTest {
 	@Test
 	public void geoSpatialQueryTest() {
 		try {
-			// Set up: addAll() will set testGeoQueryResult
-			removeAll();
-			addAll();
+			// Test set up
+			removeAll(); addAll();
 			
 			LocationService locationService = new LocationService();
 			Location center = new Location(Double.valueOf(testLng), Double.valueOf(testLat));
