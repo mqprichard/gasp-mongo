@@ -127,13 +127,17 @@ public class LocationServiceTest {
 	}
 
 	private void removeAll() {
+		MongoConnection mongoConnection = null;
 		try {
-			MongoConnection mongoConnection = new MongoConnection();
+			mongoConnection = new MongoConnection();
 			mongoConnection.connect();
 			mongoConnection.deleteLocations();
 		}
 		catch (Exception e) {
 			fail();
+		}
+		finally{
+			mongoConnection.getMongo().close();
 		}
 	}
 
