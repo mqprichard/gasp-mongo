@@ -73,7 +73,7 @@ public class MongoConnection {
 		}
 	}
 	
-	public String newLocation( Location location ) {
+	public String newLocation( GeoLocation location ) {
 		
 		DBCollection locations = getCollection(); 
 
@@ -123,8 +123,13 @@ public class MongoConnection {
 
 	// db.locations.find( { location : { $within : { $center: [ [-122.1139858, 37.3774655] , 0.005 ] } } } )
 	// http://docs.mongodb.org/manual/reference/operator/center/#op._S_center
-	public String getLocationsByGeoCenter(GeoLocation center,
+	public String getLocationsByGeoCenter(Location center,
 										  double radius )  {
+		if (logger.isDebugEnabled()) {
+			logger.debug("getLocationsByGeoCenter(): lng = " + center.getLng());
+			logger.debug("getLocationsByGeoCenter(): lat = " + center.getLat());
+			logger.debug("getLocationsByGeoCenter(): radius = " + radius);
+		}
 		
 		DBCollection locations = getCollection(); 
 		locations.ensureIndex(new BasicDBObject("location", "2d"));

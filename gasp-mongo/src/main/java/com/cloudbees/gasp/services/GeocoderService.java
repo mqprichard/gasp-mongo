@@ -20,6 +20,11 @@ public class GeocoderService {
 	private Response.StatusType errorCode = null;
 	private GeocodeResponse geocoderResponse = null;
 	
+	public GeocoderService() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public Response.StatusType getErrorCode() {
 		return errorCode;
 	}

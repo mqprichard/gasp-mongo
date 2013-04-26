@@ -15,10 +15,11 @@ import javax.ws.rs.core.Response.StatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cloudbees.gasp.model.Location;
 import com.cloudbees.gasp.model.GeoLocation;
+import com.cloudbees.gasp.model.Location;
 import com.cloudbees.gasp.model.LocationQuery;
 import com.cloudbees.gasp.model.MongoConnection;
+import com.cloudbees.gasp.model.SpatialQuery;
 
 import com.google.code.geocoder.Geocoder;
 import com.google.code.geocoder.GeocoderRequestBuilder;
@@ -103,13 +104,13 @@ public class LocationService extends HttpServlet {
 															.getResults().get(0)
 															.getGeometry()
 															.getLocation());
-							GeoLocation theLocation = gson.fromJson(json, GeoLocation.class);
+							Location theLocation = gson.fromJson(json, Location.class);
 							
 							// Get formatted address string from GeocoderResponse
 							String formattedAddress = geocoderResponse.getResults().get(0).getFormattedAddress();
 							
 							// GaspLocation is stored in Mongo and returned to the client
-							Location gaspLocation = new Location(location.getName(),
+							GeoLocation gaspLocation = new GeoLocation(location.getName(),
 													 					 formattedAddress,
 													 					 theLocation);
 							mongoConnection.connect();
@@ -152,100 +153,63 @@ public class LocationService extends HttpServlet {
 			logger.debug("Name = " + location.getName());
 			logger.debug("AddressString = " + location.getAddressString());
 			
-			GeocodeResponse geocoderResponse = geocodeService(location.getAddressString());
-
-			switch(geocoderResponse.getStatus()) {
-				
-				case ZERO_RESULTS:	// No match found: return 204 No Content
-									logger.info("No matches found for address: " + location.getAddressString());
-							   	    return Response.status(Response.Status.NO_CONTENT).build();
+			GeocoderService geocoder = new GeocoderService();
 			
-				case OK: 	// More than one match found: return 204 No Content
-							if (geocoderResponse.getResults().size() > 1) {
-								logger.info("Ambiguous: more than one match for address: " 
-											+ location.getAddressString());
-								return Response.status(Response.Status.NO_CONTENT).build();				
-							}
-
-							//We have a match: return 200 OK plus full result data
-							return Response
-									.status(Response.Status.OK)
-									.entity(new Gson().toJson(geocoderResponse.getResults().get(0)))
-									.build();
-					
-					// There was a problem with the Google Geocoder Service
-					// Return 500 Internal Server Error
-					case ERROR:
-					case INVALID_REQUEST:
-					case OVER_QUERY_LIMIT:
-					case REQUEST_DENIED:
-					case UNKNOWN_ERROR: 
-					default:			
-						logger.info("Google Geocoding API returned" + geocoderResponse.getStatus());
-						return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();	
-				}
+			if (geocoder.callGeocoder(location)) {
+				String geoResult = geocoder.getGeocoderResponse()
+						   				.getResults()
+						   				.get(0)
+						   				.toString();
+				logger.debug("Geocoder Result: " + geoResult);
+				
+				return Response
+						.status(Response.Status.OK)
+						.entity(geoResult.toString())
+						.build();
+			}
+			else {
+				return Response.status(geocoder.getErrorCode()).build();
+			}
 		}
 		catch (Exception e){
-			logger.error("Exception processing location request", e);
-			// Return 500 Internal Server Error
-    		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();		
+			logger.error("getLatLng()", e.getStackTrace());
+	    	return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();		
 		}
 	}
 	
 	@POST
     @Path("/latlng")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON) 
 	public Response getLatLng( LocationQuery location ) {
 		try {
 			logger.debug("Name = " + location.getName());
 			logger.debug("AddressString = " + location.getAddressString());
 			
-			GeocodeResponse geocoderResponse = geocodeService(location.getAddressString());
-
-			switch(geocoderResponse.getStatus()) {
+			GeocoderService geocoder = new GeocoderService();
+			if (geocoder.callGeocoder(location)) {
+				String geoResult = geocoder.getGeocoderResponse()
+						   				.getResults()
+						   				.get(0)
+						   				.getGeometry()
+						   				.getLocation()
+						   				.toString();
 				
-				case ZERO_RESULTS:	// No match found: return 204 No Content
-									logger.info("No matches found for address: " + location.getAddressString());
-							   	    return Response.status(Response.Status.NO_CONTENT).build();
-			
-				case OK: 	// More than one match found: return 204 No Content
-							if (geocoderResponse.getResults().size() > 1) {
-								logger.info("Ambiguous: more than one match for address: " 
-											+ location.getAddressString());
-								return Response.status(Response.Status.NO_CONTENT).build();				
-							}
-
-							// Create a Location object from GeocoderResponse
-							Gson gson = new Gson();
-							String json = gson.toJson(geocoderResponse
-															.getResults().get(0)
-															.getGeometry()
-															.getLocation());
-							GeoLocation theLocation = gson.fromJson(json, GeoLocation.class);
-							
-							//We have a match: return 200 OK plus location data
-							return Response
-									.status(Response.Status.OK)
-									.entity(gson.toJson(theLocation))
-									.build();
-					
-					// There was a problem with the Google Geocoder Service
-					// Return 500 Internal Server Error
-					case ERROR:
-					case INVALID_REQUEST:
-					case OVER_QUERY_LIMIT:
-					case REQUEST_DENIED:
-					case UNKNOWN_ERROR: 
-					default:			
-						logger.info("Google Geocoding API returned" + geocoderResponse.getStatus());
-						return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();	
-				}
+				logger.debug("Geocoded LatLng: " + geoResult);
+				
+				//We have a match: return 200 OK plus location data
+				return Response
+						.status(Response.Status.OK)
+						.entity(geoResult.toString())
+						.build();						
+			}
+			else {
+				return Response.status(geocoder.getErrorCode()).build();
+			}
 		}
 		catch (Exception e){
-			logger.error("Exception processing location request", e);
-			// Return 500 Internal Server Error
-    		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();		
+			logger.error("getLatLng()", e.getStackTrace());
+	    	return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();		
 		}
 	}	
 	
@@ -262,9 +226,7 @@ public class LocationService extends HttpServlet {
 			statusCode = Response.Status.OK;
 		} 
 		catch (Exception e) {
-			e.printStackTrace();
-
-			// Return 500 Internal Server Error
+			logger.error("getLocations()" + e.getStackTrace());
     		statusCode = Response.Status.INTERNAL_SERVER_ERROR;
 		}
 		finally {
@@ -276,5 +238,33 @@ public class LocationService extends HttpServlet {
 		else
 			return Response.status(statusCode).entity(result).build();
 	}	
+
+	@POST
+    @Path("/geocenter")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getGeoSpatialCenter( SpatialQuery query ) {
+		StatusType statusCode = null;
+		String result = null;
+		
+		try {			
+			mongoConnection.connect();
+			result = mongoConnection.getLocationsByGeoCenter(
+										query.getCenter(), query.getRadius());
+			statusCode = Response.Status.OK;
+		} 
+		catch (Exception e) {
+			logger.error("getGeoSpatialCenter", e.getStackTrace());
+    		statusCode = Response.Status.INTERNAL_SERVER_ERROR;
+		}
+		finally {
+			mongoConnection.getMongo().close();
+		}
+		
+		if (statusCode != Response.Status.OK)
+			return Response.status(statusCode).build();
+		else
+			return Response.status(statusCode).entity(result).build();
+	}
 	
 }

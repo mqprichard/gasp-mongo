@@ -9,13 +9,15 @@ public class MongoConnectionTest {
 	private final String testName = "Work";
 	private final String testName2 = "CloudBees";
 	private final String testAddress = "289 South San Antonio Road, Los Altos, CA 94022, USA";
-	private final double testLat = 37.3774655;
+
 	private final double testLng = -122.1139858;
-	private final GeoLocation testLocation = new GeoLocation(testLat, testLng);
-	private final Location testGaspLocation = new Location(testName, 
+	private final double testLat = 37.3774655;
+	
+	private final Location testLocation = new Location(testLng, testLat);
+	private final GeoLocation testGaspLocation = new GeoLocation(testName, 
 																   testAddress,
 																   testLocation);
-	private final Location testGaspLocation2 = new Location(testName2, 
+	private final GeoLocation testGaspLocation2 = new GeoLocation(testName2, 
 			   														testAddress,
 			   														testLocation);	
 	private final String testResult1 = "[{ \"name\" : \"Work\" , " +
@@ -44,20 +46,6 @@ public class MongoConnectionTest {
 		}
 	}
 
-	@Test
-	public void geoSearchTest() {
-		try {
-			mongoConnection.connect();
-			mongoConnection.getLocationsByGeoCenter(testLocation, 0.005);
-		}
-		catch (Exception e) {
-			fail();
-		}
-		finally {
-			mongoConnection.getMongo().close();
-		}
-	}
-	
 	@Test
 	public void locationCRUDTest() {
 		try {

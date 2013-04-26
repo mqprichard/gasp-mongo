@@ -8,7 +8,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Test;
 
-import com.cloudbees.gasp.model.GeoLocation;
+import com.cloudbees.gasp.model.Location;
 import com.cloudbees.gasp.model.LocationQuery;
 import com.google.gson.Gson;
 
@@ -50,7 +50,7 @@ public class LocationServiceTest {
 			
 			// Validate location
 			JSONObject geometry = json.getJSONObject("geometry");
-			GeoLocation myLoc = new Gson().fromJson(geometry.get("location").toString(), GeoLocation.class);
+			Location myLoc = new Gson().fromJson(geometry.get("location").toString(), Location.class);
 			assertEquals(String.valueOf(myLoc.getLat()),testLat);
 			assertEquals(String.valueOf(myLoc.getLng()), testLng);
 		}
@@ -110,7 +110,7 @@ public class LocationServiceTest {
 			
 			// Validate formatted address
 			JSONObject json = getResponseJson( response );
-			GeoLocation myLoc = new Gson().fromJson(json.toString(), GeoLocation.class);
+			Location myLoc = new Gson().fromJson(json.toString(), Location.class);
 			assertEquals(String.valueOf(myLoc.getLat()),testLat);
 			assertEquals(String.valueOf(myLoc.getLng()), testLng);
 		}
@@ -135,7 +135,7 @@ public class LocationServiceTest {
 			assertEquals(json.get("formattedAddress"), testFormattedAddress);
 			
 			// Validate location 
-			GeoLocation myLoc = new Gson().fromJson(json.get("location").toString(), GeoLocation.class);
+			Location myLoc = new Gson().fromJson(json.get("location").toString(), Location.class);
 			assertEquals(String.valueOf(myLoc.getLat()),testLat);
 			assertEquals(String.valueOf(myLoc.getLng()), testLng);
 		}
