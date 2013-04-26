@@ -55,17 +55,17 @@ public class LocationService extends HttpServlet {
 													.get(0)
 													.getFormattedAddress();
 			
-				// GaspLocation is stored in Mongo and returned to the client
-				GeoLocation gaspLocation = new GeoLocation(location.getName(),
+				// GeoLocation is stored in Mongo and returned to the client
+				GeoLocation geoLocation = new GeoLocation(location.getName(),
 									 					   formattedAddress,
 									 					   theLocation);
 				mongoConnection.connect();
-				mongoConnection.newLocation(gaspLocation);
+				mongoConnection.newLocation(geoLocation);
 			
-				//Return 200 OK plus GaspLocation data
+				//Return 200 OK plus GeoLocation data
 				return Response
 						.status(Response.Status.OK)
-						.entity(new Gson().toJson(gaspLocation))
+						.entity(new Gson().toJson(geoLocation))
 						.build();
 			}
 			else {
@@ -75,6 +75,9 @@ public class LocationService extends HttpServlet {
 		catch (Exception e){
 			logger.error("addLocation()", e.getStackTrace());
 	    	return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();		
+		}
+		finally{
+			mongoConnection.getMongo().close();
 		}
 	}
 	
@@ -200,5 +203,4 @@ public class LocationService extends HttpServlet {
 		else
 			return Response.status(statusCode).entity(result).build();
 	}
-	
 }
