@@ -15,9 +15,23 @@ public class LocationServiceTest {
 	// Test data for /lookup, /latlng and /new test cases
 	private final String testName = "Home";
 	private final String testAddress = "1285 Altschul Ave, Menlo Park CA";
-	private final String testGeoLocation = "{\"name\":\"Home\",\"formattedAddress\":\"1285 Altschul Avenue, Menlo Park, CA 94025, USA\",\"location\":{\"lat\":37.431523,\"lng\":-122.206428}}";
+	private final String testGeoLocation = 
+	        "{\"name\":\"Home\",\"formattedAddress\":\"1285 Altschul Avenue, Menlo Park, CA 94025, USA\"," +
+	        "\"location\":{\"lat\":37.431523,\"lng\":-122.206428}}";
 	private final String testLatLng = "LatLng{lat=37.4315230, lng=-122.2064280}";
-	private final String testGeocoderResult = "GeocoderResult{types=[street_address], formattedAddress='1285 Altschul Avenue, Menlo Park, CA 94025, USA', addressComponents=[GeocoderAddressComponent{longName='1285', shortName='1285', types=[street_number]}, GeocoderAddressComponent{longName='Altschul Avenue', shortName='Altschul Ave', types=[route]}, GeocoderAddressComponent{longName='Sharon Heights', shortName='Sharon Heights', types=[neighborhood, political]}, GeocoderAddressComponent{longName='Menlo Park', shortName='Menlo Park', types=[locality, political]}, GeocoderAddressComponent{longName='San Mateo', shortName='San Mateo', types=[administrative_area_level_2, political]}, GeocoderAddressComponent{longName='California', shortName='CA', types=[administrative_area_level_1, political]}, GeocoderAddressComponent{longName='United States', shortName='US', types=[country, political]}, GeocoderAddressComponent{longName='94025', shortName='94025', types=[postal_code]}], geometry=GeocoderGeometry{location=LatLng{lat=37.4315230, lng=-122.2064280}, locationType=ROOFTOP, viewport=LatLngBounds{southwest=LatLng{lat=37.43017401970850, lng=-122.2077769802915}, northeast=LatLng{lat=37.43287198029149, lng=-122.2050790197085}}, bounds=null}, partialMatch=false}";
+	private final String testGeocoderResult = 
+	        "GeocoderResult{types=[street_address], formattedAddress='1285 Altschul Avenue, Menlo Park, CA 94025, USA', " +
+	        "addressComponents=[GeocoderAddressComponent{longName='1285', shortName='1285', types=[street_number]}, " +
+	        "GeocoderAddressComponent{longName='Altschul Avenue', shortName='Altschul Ave', types=[route]}, " +
+	        "GeocoderAddressComponent{longName='Sharon Heights', shortName='Sharon Heights', types=[neighborhood, political]}, " +
+	        "GeocoderAddressComponent{longName='Menlo Park', shortName='Menlo Park', types=[locality, political]}, " +
+	        "GeocoderAddressComponent{longName='San Mateo', shortName='San Mateo', types=[administrative_area_level_2, political]}, " +
+	        "GeocoderAddressComponent{longName='California', shortName='CA', types=[administrative_area_level_1, political]}, " +
+	        "GeocoderAddressComponent{longName='United States', shortName='US', types=[country, political]}, " +
+	        "GeocoderAddressComponent{longName='94025', shortName='94025', types=[postal_code]}], " +
+	        "geometry=GeocoderGeometry{location=LatLng{lat=37.4315230, lng=-122.2064280}, locationType=ROOFTOP, " +
+	        "viewport=LatLngBounds{southwest=LatLng{lat=37.43017401970850, lng=-122.2077769802915}, " +
+	        "northeast=LatLng{lat=37.43287198029149, lng=-122.2050790197085}}, bounds=null}, partialMatch=false}";
 
 	// Additional location for /geocenter test
 	private final String testName2 = "The Dutch Goose";
