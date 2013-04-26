@@ -3,6 +3,7 @@ package com.cloudbees.gasp.model;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
+// JSON format for POST data (/new, /lookup and /latlng)
 public class LocationQuery {
 	private String name = null;
 	private String addressString = null;

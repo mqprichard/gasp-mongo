@@ -3,6 +3,8 @@ package com.cloudbees.gasp.model;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
+// JSON format for /lookup and /new return body
+// Includes formattedAddress and Location information from GeocoderService
 public class GeoLocation {
 	private String name;
 	private String formattedAddress;

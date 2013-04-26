@@ -15,7 +15,6 @@ import com.mongodb.MongoURI;
 import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
 
-
 public class MongoConnection {
 	private final Logger logger = LoggerFactory.getLogger(MongoConnection.class);
 
