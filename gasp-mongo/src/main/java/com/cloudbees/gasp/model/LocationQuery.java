@@ -5,32 +5,32 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 // JSON format for POST data (/new, /lookup and /latlng)
 public class LocationQuery {
-	private String name = null;
-	private String addressString = null;
-	
-	public LocationQuery() {
-		super();
-	}
+    private String name = null;
+    private String addressString = null;
 
-	public LocationQuery(String name, String addressString) {
-		super();
-		this.name = name;
-		this.addressString = addressString;
-	}
+    public LocationQuery() {
+        super();
+    }
 
-	public String getName() {
-		return name;
-	}
+    public LocationQuery(String name, String addressString) {
+        super();
+        this.name = name;
+        this.addressString = addressString;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getAddressString() {
-		return addressString;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setAddressString(String addressString) {
-		this.addressString = addressString;
-	}
+    public String getAddressString() {
+        return addressString;
+    }
+
+    public void setAddressString(String addressString) {
+        this.addressString = addressString;
+    }
 }
