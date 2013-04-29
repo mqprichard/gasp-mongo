@@ -84,7 +84,7 @@ public class LocationService extends HttpServlet {
     @POST
     @Path("/lookup")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response checkLocation(LocationQuery location) {
         try {
             logger.debug("Name = " + location.getName());
@@ -114,7 +114,7 @@ public class LocationService extends HttpServlet {
     @POST
     @Path("/latlng")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public Response getLatLng(LocationQuery location) {
         try {
             logger.debug("Name = " + location.getName());

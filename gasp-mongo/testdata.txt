@@ -1,5 +1,5 @@
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://localhost:8080/locations/lookup -d '{"name":"Home","addressString":"1285 Altschul Ave, Menlo Park CA"}'; echo
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://localhost:8080/locations/latlng -d '{"name":"Home","addressString":"1285 Altschul Ave, Menlo Park CA"}'; echo
+curl -H "Accept: text/plain" -H "Content-Type: application/json" -X POST http://localhost:8080/locations/lookup -d '{"name":"Home","addressString":"1285 Altschul Ave, Menlo Park CA"}'; echo
+curl -H "Accept: text/plain" -H "Content-Type: application/json" -X POST http://localhost:8080/locations/latlng -d '{"name":"Home","addressString":"1285 Altschul Ave, Menlo Park CA"}'; echo
 
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://localhost:8080/locations/new -d '{"name":"Cliff House","addressString":"1090 Point Lobos San Francisco CA 94121"}'; echo
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://localhost:8080/locations/new -d '{"name":"Alices Restaurant","addressString":"17288 Skyline Boulevard Woodside, CA"}'; echo
