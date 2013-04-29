@@ -3,8 +3,8 @@ package com.cloudbees.gasp.model;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-// JSON format for /latlng return body
-// Equates to GeocoderService's "location" object
+// JSON format for Location (lat/lng) objects 
+// Includes LatLng information from geocoder
 public class Location {
     private double lat;
     private double lng;
