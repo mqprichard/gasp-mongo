@@ -30,17 +30,17 @@ public class MongoConnection {
 
     public MongoConnection() {
         // Get MongoURI from system property/environment
-        envMongoURI = System.getProperty("mongoURI");
-        if (envMongoURI == null) envMongoURI = System.getenv("mongoURI");
-
-        if (!(envMongoURI == null)) {
-            logger.info("Using MongoURI from system environment: "
-                    + envMongoURI);
+        if ((envMongoURI = System.getProperty("mongoURI")) != null) {
+            logger.info("Using mongoURI system property: " + envMongoURI);
             strURI = envMongoURI;
         }
-        else
-            System.out.println("MongoURI system environment not set - "
-                    + "Using default: " + strURI);
+        else if ((envMongoURI = System.getenv("mongoURI")) != null){
+            logger.info("Using mongoURI from system environment: " + envMongoURI);
+            strURI = envMongoURI;
+        }
+        else {
+            logger.info("Using default mongoURI: " + strURI);
+        }
     }
 
     public DB getMongoDB() {
