@@ -19,9 +19,6 @@ public class MongoConnection {
     private final Logger logger = LoggerFactory
             .getLogger(MongoConnection.class);
 
-    protected String envMongoURI = "";
-    // protected String strURI =
-    // "mongodb://cloudbees:6dce0b9d30f52ac73bfa74c492aa3382@alex.mongohq.com:10064/ELSfmlamgpGNTqD6jFEw";
     protected String strURI = "mongodb://guest:welcome1@localhost:27017/mydb";
     protected DB mongoDB = null;
     protected Mongo mongo = null;
@@ -29,15 +26,19 @@ public class MongoConnection {
     protected String mongoLocations = "locations";
 
     public MongoConnection() {
-        // Get MongoURI from system property/environment
+        String envMongoURI = "";
+        
+        // Either: get MongoURI from system property
         if ((envMongoURI = System.getProperty("mongoURI")) != null) {
             logger.info("Using mongoURI system property: " + envMongoURI);
             strURI = envMongoURI;
         }
+        // Or: get MongoURI from system environment
         else if ((envMongoURI = System.getenv("mongoURI")) != null){
             logger.info("Using mongoURI from system environment: " + envMongoURI);
             strURI = envMongoURI;
         }
+        // Otherwise: default to (hard-coded) local MongoDB
         else {
             logger.info("Using default mongoURI: " + strURI);
         }
