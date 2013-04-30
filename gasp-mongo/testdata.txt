@@ -17,3 +17,17 @@ curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST h
 
 db.locations.find( { location : { $within : { $center: [ [-122.1139858, 37.3774655] , 0.005 ] } } } )
 db.locations.ensureIndex({location: "2d"})
+
+
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Cliff House","addressString":"1090 Point Lobos San Francisco CA 94121"}'; echo
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Alices Restaurant","addressString":"17288 Skyline Boulevard Woodside, CA"}'; echo
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Flea Street Cafe","addressString":"3607 Alameda de las Pulgas Menlo Park, CA 94025"}'; echo
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"The Dutch Goose","addressString":"3567 Alameda De Las Pulgas  Menlo Park, CA 94025"}'; echo
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Mikado Restaurant","addressString":"161 Main St  Los Altos, CA"}'; echo
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Sumika Grill","addressString":"236 Central Plaza Los Altos, CA"}'; echo
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Peets Coffee","addressString":"367 State Street, Los Altos"}'; echo
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Work","addressString":"289 S San Antonio, Los Altos 94022"}'; echo
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Home","addressString":"1285 Altschul Ave, Menlo Park, CA 94025"}'; echo
+
+curl -H "Accept: application/json" -X GET http://gasp-mongo.mqprichard.cloudbees.net/locations/get; echo
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/geocenter -d '{"center" : {"lng" : -122.1139858 , "lat" : 37.3774655 }, "radius" : 0.005}'; echo
