@@ -8,6 +8,7 @@ This is a Maven project, written in Java using the Google Geocoding API v3, Mong
 For more information, please see:
 ---------------------------------
 [Google Geocoding API v3](https://developers.google.com/maps/documentation/geocoding/)
+
 [MongoDB Geospatial Indexes and Queries](http://docs.mongodb.org/manual/reference/operator/query-geospatial/)
 
 General Notes
@@ -93,13 +94,19 @@ Some sample data
 ----------------
 
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Cliff House","addressString":"1090 Point Lobos San Francisco CA 94121"}';
+
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Alices Restaurant","addressString":"17288 Skyline Boulevard Woodside, CA"}';
+
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Flea Street Cafe","addressString":"3607 Alameda de las Pulgas Menlo Park, CA 94025"}';
+
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"The Dutch Goose","addressString":"3567 Alameda De Las Pulgas  Menlo Park, CA 94025"}';
+
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Mikado Restaurant","addressString":"161 Main St  Los Altos, CA"}';
+
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Sumika Grill","addressString":"236 Central Plaza Los Altos, CA"}';
+
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Peets Coffee","addressString":"367 State Street, Los Altos"}';
+
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Work","addressString":"289 S San Antonio, Los Altos 94022"}';
+
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Home","addressString":"1285 Altschul Ave, Menlo Park, CA 94025"}';
-
-
