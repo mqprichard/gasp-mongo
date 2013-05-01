@@ -34,8 +34,9 @@ public class LocationService extends HttpServlet {
     @Produces(MediaType.APPLICATION_JSON)
     public Response addLocation(LocationQuery location) {
         try {
-            logger.debug("Name = " + location.getName());
-            logger.debug("AddressString = " + location.getAddressString());
+            logger.debug("addLocation: Name = " + location.getName());
+            logger.debug("addLocation: AddressString = "
+                         + location.getAddressString());
 
             GeocoderService geocoder = new GeocoderService();
 
@@ -44,17 +45,15 @@ public class LocationService extends HttpServlet {
                 // Create a Location object from GeocoderResponse
                 Gson gson = new Gson();
                 String json = gson.toJson(geocoder.getGeocoderResponse()
-                                                  .getResults()
-                                                  .get(0)
-                                                  .getGeometry()
-                                                  .getLocation());
+                                  .getResults()
+                                  .get(0)
+                                  .getGeometry()
+                                  .getLocation());
                 Location theLocation = gson.fromJson(json, Location.class);
 
                 // Get formatted address string from GeocoderResponse
                 String formattedAddress = geocoder.getGeocoderResponse()
-                                                  .getResults()
-                                                  .get(0)
-                                                  .getFormattedAddress();
+                        .getResults().get(0).getFormattedAddress();
 
                 // GeoLocation is stored in Mongo and returned to the client
                 GeoLocation geoLocation = new GeoLocation(location.getName(),
@@ -73,8 +72,28 @@ public class LocationService extends HttpServlet {
         }
         catch (Exception e) {
             logger.error("addLocation()", e.getStackTrace());
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+        finally {
+            mongoConnection.getMongo().close();
+        }
+    }
+
+    @POST
+    @Path("/remove")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response removeLocation(LocationQuery location) {
+        try {
+            logger.debug("removeLocation: Name = " + location.getName());
+
+            mongoConnection.connect();
+            mongoConnection.deleteLocationByName(location.getName());
+
+            return Response.status(Response.Status.OK).build();
+        }
+        catch (Exception e) {
+            logger.error("removeLocation()", e.getStackTrace());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
         finally {
             mongoConnection.getMongo().close();
@@ -87,14 +106,17 @@ public class LocationService extends HttpServlet {
     @Produces(MediaType.TEXT_PLAIN)
     public Response checkLocation(LocationQuery location) {
         try {
-            logger.debug("Name = " + location.getName());
-            logger.debug("AddressString = " + location.getAddressString());
+            logger.debug("checkLocation: Name = " + location.getName());
+            logger.debug("checkLocation: AddressString = "
+                         + location.getAddressString());
 
             GeocoderService geocoder = new GeocoderService();
 
             if (geocoder.callGeocoder(location)) {
-                String geoResult = geocoder.getGeocoderResponse().getResults()
-                        .get(0).toString();
+                String geoResult = geocoder.getGeocoderResponse()
+                                           .getResults()
+                                           .get(0)
+                                           .toString();
                 logger.debug("Geocoder Result: " + geoResult);
 
                 return Response.status(Response.Status.OK)
@@ -106,46 +128,10 @@ public class LocationService extends HttpServlet {
         }
         catch (Exception e) {
             logger.error("getLatLng()", e.getStackTrace());
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-    @POST
-    @Path("/latlng")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response getLatLng(LocationQuery location) {
-        try {
-            logger.debug("Name = " + location.getName());
-            logger.debug("AddressString = " + location.getAddressString());
-
-            GeocoderService geocoder = new GeocoderService();
-            if (geocoder.callGeocoder(location)) {
-                String geoResult = geocoder.getGeocoderResponse()
-                                           .getResults()
-                                           .get(0)
-                                           .getGeometry()
-                                           .getLocation()
-                                           .toString();
-
-                logger.debug("Geocoded LatLng: " + geoResult);
-
-                // We have a match: return 200 OK plus location data
-                return Response.status(Response.Status.OK)
-                        .entity(geoResult.toString()).build();
-            }
-            else {
-                return Response.status(geocoder.getErrorCode()).build();
-            }
-        }
-        catch (Exception e) {
-            logger.error("getLatLng()", e.getStackTrace());
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .build();
-        }
-    }
-
+    
     @GET
     @Path("/get")
     @Produces(MediaType.APPLICATION_JSON)
@@ -166,8 +152,8 @@ public class LocationService extends HttpServlet {
             mongoConnection.getMongo().close();
         }
 
-        if (statusCode != Response.Status.OK) return Response
-                .status(statusCode).build();
+        if (statusCode != Response.Status.OK) 
+            return Response.status(statusCode).build();
         else
             return Response.status(statusCode).entity(result).build();
     }
@@ -183,7 +169,7 @@ public class LocationService extends HttpServlet {
         try {
             mongoConnection.connect();
             result = mongoConnection.getLocationsByGeoCenter(query.getCenter(),
-                    query.getRadius());
+                                                             query.getRadius());
             statusCode = Response.Status.OK;
         }
         catch (Exception e) {
@@ -194,8 +180,8 @@ public class LocationService extends HttpServlet {
             mongoConnection.getMongo().close();
         }
 
-        if (statusCode != Response.Status.OK) return Response
-                .status(statusCode).build();
+        if (statusCode != Response.Status.OK) 
+            return Response.status(statusCode).build();
         else
             return Response.status(statusCode).entity(result).build();
     }

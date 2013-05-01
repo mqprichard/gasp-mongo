@@ -16,8 +16,7 @@ import com.mongodb.WriteConcern;
 import com.mongodb.WriteResult;
 
 public class MongoConnection {
-    private final Logger logger = LoggerFactory
-            .getLogger(MongoConnection.class);
+    private final Logger logger = LoggerFactory.getLogger(MongoConnection.class);
 
     protected String strURI = "mongodb://guest:welcome1@localhost:27017/mydb";
     protected DB mongoDB = null;
@@ -30,17 +29,17 @@ public class MongoConnection {
         
         // Either: get MongoURI from system property
         if ((envMongoURI = System.getProperty("mongoURI")) != null) {
-            logger.info("Using mongoURI system property: " + envMongoURI);
+            logger.debug("Using mongoURI system property: " + envMongoURI);
             strURI = envMongoURI;
         }
         // Or: get MongoURI from system environment
         else if ((envMongoURI = System.getenv("mongoURI")) != null){
-            logger.info("Using mongoURI from system environment: " + envMongoURI);
+            logger.debug("Using mongoURI from system environment: " + envMongoURI);
             strURI = envMongoURI;
         }
         // Otherwise: default to (hard-coded) local MongoDB
         else {
-            logger.info("Using default mongoURI: " + strURI);
+            logger.debug("Using default mongoURI: " + strURI);
         }
     }
 
@@ -114,7 +113,7 @@ public class MongoConnection {
         // Search
         BasicDBObject findLocations = new BasicDBObject();
         List<DBObject> listLocations = locations.find(findLocations, omits)
-                .limit(200).toArray();
+                                                .limit(200).toArray();
 
         if (logger.isDebugEnabled()) logger.debug("getLocations(): "
                                                   + listLocations.toString());
@@ -123,8 +122,7 @@ public class MongoConnection {
         return (listLocations.toString());
     }
 
-    // db.locations.find( { location : { $within : { $center: [ [-122.1139858,
-    // 37.3774655] , 0.005 ] } } } )
+    // db.locations.find( { location : { $within : { $center: [ [-122.1139858, 37.3774655] , 0.005 ] } } } )
     // http://docs.mongodb.org/manual/reference/operator/center/#op._S_center
     public String getLocationsByGeoCenter(Location center, double radius) {
         if (logger.isDebugEnabled()) {

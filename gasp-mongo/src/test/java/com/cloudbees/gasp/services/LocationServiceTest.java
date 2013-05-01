@@ -12,13 +12,13 @@ import com.cloudbees.gasp.model.MongoConnection;
 import com.cloudbees.gasp.model.SpatialQuery;
 
 public class LocationServiceTest {
-	// Test data for /lookup, /latlng and /new test cases
+	// Test data for /lookup, /new and /remove test cases
 	private final String testName = "Home";
 	private final String testAddress = "1285 Altschul Ave, Menlo Park CA";
 	private final String testGeoLocation = 
 	        "{\"name\":\"Home\",\"formattedAddress\":\"1285 Altschul Avenue, Menlo Park, CA 94025, USA\"," +
 	        "\"location\":{\"lat\":37.431523,\"lng\":-122.206428}}";
-	private final String testLatLng = "LatLng{lat=37.4315230, lng=-122.2064280}";
+
 	private final String testGeocoderResult = 
 	        "GeocoderResult{types=[street_address], formattedAddress='1285 Altschul Avenue, Menlo Park, CA 94025, USA', " +
 	        "addressComponents=[GeocoderAddressComponent{longName='1285', shortName='1285', types=[street_number]}, " +
@@ -109,22 +109,6 @@ public class LocationServiceTest {
 	}
 	
 	@Test
-	public void latLngTest() {
-		try {
-			LocationService locationService = new LocationService();
-			LocationQuery location = new LocationQuery(testName, testAddress);
-			Response response = locationService.getLatLng(location);
-		
-			// Validate HTTP Return Code and Body
-			assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
-			assertEquals(response.getEntity().toString(), testLatLng );
-		}
-		catch (Exception e) {
-			fail();
-		}
-	}
-	
-	@Test
 	public void addLocationTest() {
 		try {
 			LocationService locationService = new LocationService();
@@ -134,11 +118,40 @@ public class LocationServiceTest {
 			// Validate HTTP Return Code and Body
 			assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
 			assertEquals(response.getEntity().toString(), testGeoLocation );
+			
+	        // Repeat: service should be idempotent 
+			response = locationService.addLocation(location);
+	        assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
+	        assertEquals(response.getEntity().toString(), testGeoLocation );
 		}
 		catch (Exception e) {
 			fail();
 		}
 	}
+	
+    @Test
+    public void removeLocationTest() {
+        Response response = null;
+        
+        try {
+            LocationService locationService = new LocationService();
+            LocationQuery location = new LocationQuery(testName, testAddress);
+            
+            // Add the location and then remove it
+            locationService.addLocation(location);
+            response = locationService.removeLocation(location);
+        
+            // Validate HTTP Return Code
+            assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
+            
+            // Repeat: service should be idempotent 
+            response = locationService.removeLocation(location);
+            assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());         
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }	
 
 	private void removeAll() {
 		MongoConnection mongoConnection = null;
