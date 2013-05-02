@@ -26,18 +26,15 @@ public class MongoConnection {
 
     public MongoConnection() {
         String envMongoURI = null;
-        
-        logger.debug("(System Property) MONGOHQ_URL_GASP: " + System.getProperty("MONGOHQ_URL_GASP"));
-        logger.debug("(Environment variable) MONGOHQ_URL_GASP: " + System.getenv("MONGOHQ_URL_GASP"));
-        
-        // Either: get MongoURI from system property
-        if ((envMongoURI = System.getProperty("mongoURI")) != null) {
-            logger.debug("Using mongoURI system property: " + envMongoURI);
+          
+        // Either: get MongoURL from system property
+        if ((envMongoURI = System.getProperty("MONGOHQ_URL_GASP")) != null) {
+            logger.debug("Using MONGOHQ_URL_GASP system property: " + envMongoURI);
             strURI = envMongoURI;
         }
-        // Or: get MongoURI from system environment
-        else if ((envMongoURI = System.getenv("mongoURI")) != null){
-            logger.debug("Using mongoURI from system environment: " + envMongoURI);
+        // Or: get MongoURL from system environment
+        else if ((envMongoURI = System.getenv("MONGOHQ_URL_GASP")) != null){
+            logger.debug("Using MONGOHQ_URL_GASP from system environment: " + envMongoURI);
             strURI = envMongoURI;
         }
         // Otherwise: default to (hard-coded) local MongoDB
