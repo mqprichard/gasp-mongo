@@ -27,15 +27,8 @@ public class MongoConnection {
     public MongoConnection() {
         String envMongoURI = null;
         
-        String envCloudbeesMongo = null;
-        // Either: get MONGOHQ_URL_GASP from system property
-        if ((envMongoURI = System.getProperty("MONGOHQ_URL_GASP")) != null) {
-            logger.debug("Using system property: " + envCloudbeesMongo);
-        }
-        // Or: get MONGOHQ_URL_GASP from system environment
-        else if ((envMongoURI = System.getenv("MONGOHQ_URL_GASP")) != null){
-            logger.debug("Using system environment: " + envCloudbeesMongo);
-        }
+        logger.debug("MONGOHQ_URL_GASP: " + System.getProperty("(prop) MONGOHQ_URL_GASP"));
+        logger.debug("MONGOHQ_URL_GASP: " + System.getenv("(env) MONGOHQ_URL_GASP"));
         
         // Either: get MongoURI from system property
         if ((envMongoURI = System.getProperty("mongoURI")) != null) {
