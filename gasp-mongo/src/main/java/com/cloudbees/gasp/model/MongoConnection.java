@@ -25,16 +25,16 @@ public class MongoConnection {
     protected String mongoLocations = "locations";
 
     public MongoConnection() {
-        String envMongoURI = "";
+        String envMongoURI = null;
         
-        String envCloudbeesMongo = "";
+        String envCloudbeesMongo = null;
         // Either: get MONGOHQ_URL_GASP from system property
         if ((envMongoURI = System.getProperty("MONGOHQ_URL_GASP")) != null) {
-            logger.debug("Using mongoURI system property: " + envCloudbeesMongo);
+            logger.debug("Using system property: " + envCloudbeesMongo);
         }
         // Or: get MONGOHQ_URL_GASP from system environment
         else if ((envMongoURI = System.getenv("MONGOHQ_URL_GASP")) != null){
-            logger.debug("Using mongoURI from system environment: " + envCloudbeesMongo);
+            logger.debug("Using system environment: " + envCloudbeesMongo);
         }
         
         // Either: get MongoURI from system property
