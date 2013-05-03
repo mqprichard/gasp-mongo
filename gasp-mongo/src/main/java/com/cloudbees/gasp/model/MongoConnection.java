@@ -34,10 +34,10 @@ public class MongoConnection {
             if ((envBuildSecretDir = System.getenv("MONGO_GASP_TEST")) != null) {
                 logger.debug("MONGO_GASP_TEST = " + envBuildSecretDir);
                 FileInputStream propFile = new FileInputStream(envBuildSecretDir + "/" + "gasp-mongo.env");
-                Properties p =new Properties(System.getProperties());
+                Properties p = new Properties(System.getProperties());
                 p.load(propFile);
                 System.setProperties(p);
-                logger.debug("MONGOHQ_URL_GASP (from Build Secret): " + System.getProperty("MONGO_URL_GASP"));
+                logger.debug("MONGOHQ_URL_GASP (from Build Secret): " + System.getProperty("MONGOHQ_URL_GASP"));
             }
         }
         catch (Exception e){
