@@ -1,7 +1,9 @@
 package com.cloudbees.gasp.model;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,17 +27,32 @@ public class MongoConnection {
     protected String mongoLocations = "locations";
 
     public MongoConnection() {
-        String envMongoURI = null;
-          
+        String envMongoURL = null;
+        String envBuildSecretDir = null;
+ 
+        try {
+            if ((envBuildSecretDir = System.getenv("MONGO_GASP_TEST")) != null) {
+                logger.debug("MONGO_GASP_TEST = ");
+                FileInputStream propFile = new FileInputStream(envBuildSecretDir + "/" + "gasp-mongo.env");
+                Properties p =new Properties(System.getProperties());
+                p.load(propFile);
+                System.setProperties(p);
+                logger.debug("MONGOHQ_URL_GASP (from Build Secret): " + System.getProperty("MONGO_URL_GASP"));
+            }
+        }
+        catch (Exception e){
+            logger.error(e.getStackTrace().toString());
+        }
+        
         // Either: get MongoURL from system property
-        if ((envMongoURI = System.getProperty("MONGOHQ_URL_GASP")) != null) {
-            logger.debug("Using MONGOHQ_URL_GASP system property: " + envMongoURI);
-            strURI = envMongoURI;
+        if ((envMongoURL = System.getProperty("MONGOHQ_URL_GASP")) != null) {
+            logger.debug("Using MONGOHQ_URL_GASP system property: " + envMongoURL);
+            strURI = envMongoURL;
         }
         // Or: get MongoURL from system environment
-        else if ((envMongoURI = System.getenv("MONGOHQ_URL_GASP")) != null){
-            logger.debug("Using MONGOHQ_URL_GASP from system environment: " + envMongoURI);
-            strURI = envMongoURI;
+        else if ((envMongoURL = System.getenv("MONGOHQ_URL_GASP")) != null){
+            logger.debug("Using MONGOHQ_URL_GASP from system environment: " + envMongoURL);
+            strURI = envMongoURL;
         }
         // Otherwise: default to (hard-coded) local MongoDB
         else {
