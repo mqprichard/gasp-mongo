@@ -18,6 +18,24 @@ The /new and /remove operations are idempotent: for a given name, only a single 
 For geospatial queries, the units for the search radius are the same as those for the lat/lng co-ordinates (degrees): At the latitude of the San Francisco Bay area, a value of 0.005 will give a radius of about 0.3 miles, as shown in the example.
 
 
+MongoURL Settings
+-----------------
+
+The application will try to read the MongoURL setting the first time the MongoConnection() constructor is called.  It does this in the following order:
+1. System property (MONGOHQ_URL_GASP) loaded from ${MONGO_GASP_TEST}/gasp-mongo.env (for use with the Jenkins Build Secret plugin)
+2. System property (MONGOHQ_URL_GASP)
+3. System environment variable (MONGOHQ_URL_GASP)
+
+You should use a different MongoURL for continuous integration builds, or you will lose data as the unit tests will remove all locations before running.
+
+
+Running with CloudBees RUN@cloud
+--------------------------------
+
+To configure RUN@cloud to run the service, subscribe to the (free) base service from MongoHQ from GrandCentral and use the management console to create a new Mongo database to use.  You can then run the following commands using the Bees SDK to ahve the Mongo URL automatically available to your application as a system property (assuming that your app is called "gasp-mongo" and your MongoDB resource is called "gasp"):
+    bees app:bind -a gasp-mongo -r mongohq:gasp -as GASP
+
+
 Android Client Notes
 --------------------
 
