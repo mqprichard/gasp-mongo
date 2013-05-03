@@ -44,7 +44,7 @@ public class MongoConnection {
         try {
             // 1. Jenkins build secret plugin
             if ((envBuildSecretDir = System.getenv("MONGO_GASP_TEST")) != null) {
-                logger.debug("MONGO_GASP_TEST = " + envBuildSecretDir);
+                logger.debug("Getting Build Secret from: " + envBuildSecretDir);
                 FileInputStream propFile = new FileInputStream(envBuildSecretDir + "/" + "gasp-mongo.env");
                 Properties p = new Properties(System.getProperties());
                 p.load(propFile);
