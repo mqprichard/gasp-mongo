@@ -33,7 +33,7 @@ You should use a different MongoURL for continuous integration builds, or you wi
 Running with CloudBees RUN@cloud
 --------------------------------
 
-To configure RUN@cloud to run the service, subscribe to the (free) base service from MongoHQ from GrandCentral and use the management console to create a new Mongo database to use.  You can then run the following commands using the Bees SDK to have the Mongo URL automatically available to your application as a system property as described above (assuming that your app is called "gasp-mongo" and your MongoDB resource is called "gasp"):
+To configure RUN@cloud to run the service, subscribe to the (free) base service from MongoHQ from GrandCentral and use the management console to create a new Mongo database resource to use.  You can then run the following commands using the Bees SDK to have the Mongo URL automatically available to your application as a system property as described above (assuming that your app is called "gasp-mongo" and your MongoDB resource is called "gasp"):
 
     bees app:bind -a gasp-mongo -r mongohq:gasp -as GASP
 
