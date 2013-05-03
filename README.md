@@ -27,7 +27,7 @@ The application will try to read the MongoURL setting the first time the MongoCo
 2.  System property (MONGOHQ_URL_GASP)
 3.  System environment variable (MONGOHQ_URL_GASP)
 
-You should use a different MongoURL for continuous integration builds, or you will lose data as the unit tests will remove all locations before running. I suggest using the (Jenkins Build Secret plugin)[https://wiki.jenkins-ci.org/display/JENKINS/Build+Secret+Plugin] for this.
+You should use a different MongoURL for continuous integration builds, or you will lose data as the unit tests will remove all locations before running. I suggest using the [Jenkins Build Secret plugin](https://wiki.jenkins-ci.org/display/JENKINS/Build+Secret+Plugin) for this.
 
 If you are using the integrated MongoHQ service on CloudBees, note that this assumes that your MongoDB service reource (i.e. the database instance) is bound to the app using the alias GASP.  If you are using a different alias, change MONGOHQ\_URL\_GASP to MONGOHQ\_URL\_\<ALIAS\>
 
