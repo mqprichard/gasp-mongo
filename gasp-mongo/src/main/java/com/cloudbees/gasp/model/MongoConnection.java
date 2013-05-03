@@ -36,7 +36,7 @@ public class MongoConnection {
     }
 
     private String getMongoURL() {
-        String useMongoURL = "mongodb://guest:welcome1@localhost:27017/mydb";
+        String useMongoURL = "";
         String envMongoURL = null;
         String envBuildSecretDir = null;
         
@@ -65,9 +65,9 @@ public class MongoConnection {
                 useMongoURL = envMongoURL;
             }
             
-            // 4. Default: Local MongoDB
+            // Error: MONGOHQ_URL_GASP not set
             else {
-                logger.debug("Using default mongoURI: " + useMongoURL);
+                logger.error("MONGOHQ_URL_GASP not set");
             }
         }
         catch (Exception e){
