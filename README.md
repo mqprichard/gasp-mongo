@@ -22,6 +22,7 @@ MongoURL Settings
 -----------------
 
 The application will try to read the MongoURL setting the first time the MongoConnection() constructor is called.  It does this in the following order:
+
 1.  System property (MONGOHQ_URL_GASP) loaded from ${MONGO_GASP_TEST}/gasp-mongo.env (for use with the Jenkins Build Secret plugin)
 2.  System property (MONGOHQ_URL_GASP)
 3.  System environment variable (MONGOHQ_URL_GASP)
