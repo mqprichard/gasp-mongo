@@ -43,6 +43,7 @@ public class MongoConnection {
                 Properties p = new Properties(System.getProperties());
                 p.load(propFile);
                 System.setProperties(p);
+                strURI = System.getProperty("MONGOHQ_URL_GASP");
                 logger.debug("MONGOHQ_URL_GASP (from Build Secret): " + System.getProperty("MONGOHQ_URL_GASP"));
             }
             else { 
