@@ -29,7 +29,7 @@ The application will try to read the MongoURL setting the first time the MongoCo
 
 You should use a different MongoURL for continuous integration builds, or you will lose data as the unit tests will remove all locations before running.  
 If you are using the integrated MongoHQ service on CloudBees, note that this assumes that your MongoDB service reource (i.e. the database instance) is bound to the app using the alias GASP.  
-If you wish to use a different alias, you will need to change MONGOHQ\_URL\_*GASP* to MONGOHQ\_URL\_*ALIAS*
+If you are using a different alias, change MONGOHQ\_URL\_GASP to MONGOHQ\_URL\_{ALIAS}
 
 
 Running with CloudBees RUN@cloud
