@@ -32,7 +32,7 @@ public class MongoConnection {
  
         try {
             if ((envBuildSecretDir = System.getenv("MONGO_GASP_TEST")) != null) {
-                logger.debug("MONGO_GASP_TEST = ");
+                logger.debug("MONGO_GASP_TEST = " + envBuildSecretDir);
                 FileInputStream propFile = new FileInputStream(envBuildSecretDir + "/" + "gasp-mongo.env");
                 Properties p =new Properties(System.getProperties());
                 p.load(propFile);
