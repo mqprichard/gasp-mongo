@@ -37,6 +37,11 @@ To configure RUN@cloud to run the service, subscribe to the (free) base service 
 
     bees app:bind -a gasp-mongo -r mongohq:gasp -as GASP
 
+The followig comands are useful to verify your MongoHQ resources and app bindings:
+
+    bees mongohq:list
+    bees app:bindings -a gasp-mongo
+    
 
 Android Client Notes
 --------------------
