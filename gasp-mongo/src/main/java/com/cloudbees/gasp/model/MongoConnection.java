@@ -29,8 +29,14 @@ public class MongoConnection {
     public MongoConnection() {
         String envMongoURL = null;
         String envBuildSecretDir = null;
- 
+
+        // Get MONGOHQ_URL_GASP from 
+        // 1. Jenkins build secret plugin
+        // 2. System property ("MONGOHQ_URL_GASP");
+        // 3, System environment ("MONGOHQ_URL_GASP");
+        // 4. Default: Local MongoDB
         try {
+         // $MONGO_GASP_TEST has the location of the secret properties file
             if ((envBuildSecretDir = System.getenv("MONGO_GASP_TEST")) != null) {
                 logger.debug("MONGO_GASP_TEST = " + envBuildSecretDir);
                 FileInputStream propFile = new FileInputStream(envBuildSecretDir + "/" + "gasp-mongo.env");
@@ -39,24 +45,25 @@ public class MongoConnection {
                 System.setProperties(p);
                 logger.debug("MONGOHQ_URL_GASP (from Build Secret): " + System.getProperty("MONGOHQ_URL_GASP"));
             }
+            else { 
+                // Either: get MongoURL from system property
+                if ((envMongoURL = System.getProperty("MONGOHQ_URL_GASP")) != null) {
+                    logger.debug("Using MONGOHQ_URL_GASP system property: " + envMongoURL);
+                    strURI = envMongoURL;
+                }
+                // Or: get MongoURL from system environment
+                else if ((envMongoURL = System.getenv("MONGOHQ_URL_GASP")) != null){
+                    logger.debug("Using MONGOHQ_URL_GASP from system environment: " + envMongoURL);
+                    strURI = envMongoURL;
+                }
+                // Otherwise: default to (hard-coded) local MongoDB
+                else {
+                    logger.debug("Using default mongoURI: " + strURI);
+                }
+            }
         }
         catch (Exception e){
             logger.error(e.getStackTrace().toString());
-        }
-        
-        // Either: get MongoURL from system property
-        if ((envMongoURL = System.getProperty("MONGOHQ_URL_GASP")) != null) {
-            logger.debug("Using MONGOHQ_URL_GASP system property: " + envMongoURL);
-            strURI = envMongoURL;
-        }
-        // Or: get MongoURL from system environment
-        else if ((envMongoURL = System.getenv("MONGOHQ_URL_GASP")) != null){
-            logger.debug("Using MONGOHQ_URL_GASP from system environment: " + envMongoURL);
-            strURI = envMongoURL;
-        }
-        // Otherwise: default to (hard-coded) local MongoDB
-        else {
-            logger.debug("Using default mongoURI: " + strURI);
         }
     }
 
