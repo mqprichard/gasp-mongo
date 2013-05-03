@@ -7,9 +7,8 @@ This is a Maven project, written in Java using the Google Geocoding API v3, Mong
 
 For more information, please see:
 ---------------------------------
-[Google Geocoding API v3](https://developers.google.com/maps/documentation/geocoding/)
-
-[MongoDB Geospatial Indexes and Queries](http://docs.mongodb.org/manual/reference/operator/query-geospatial/)
+- [Google Geocoding API v3](https://developers.google.com/maps/documentation/geocoding/)
+- [MongoDB Geospatial Indexes and Queries](http://docs.mongodb.org/manual/reference/operator/query-geospatial/)
 
 General Notes
 -------------
