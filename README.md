@@ -108,7 +108,7 @@ curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST h
 [{ "name" : "Sumika Grill" , "formattedAddress" : "236 Plaza Central, Los Altos, CA 94022, USA" , "location" : { "lng" : -122.1166286 , "lat" : 37.3791531}}, { "name" : "Mikado Restaurant" , "formattedAddress" : "161 Main Street, Los Altos, CA 94022, USA" , "location" : { "lng" : -122.114929 , "lat" : 37.3793043}}, { "name" : "Peets Coffee" , "formattedAddress" : "367 State Street, Los Altos, CA 94022, USA" , "location" : { "lng" : -122.1179248 , "lat" : 37.3787929}}]
 
 
-Lookup an address (returns plain/text from Geocoder output - for development purposes)
+Lookup an address (returns plain/text - for dev/test purposes)
 --------------------------------------------------------------------------------------
 
 curl -H "Accept: text/plain" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/lookup -d '{"name":"Cliff House","addressString":"1090 Point Lobos San Francisco CA 94121"}'
