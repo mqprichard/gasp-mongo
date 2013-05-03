@@ -20,54 +20,62 @@ import com.mongodb.WriteResult;
 public class MongoConnection {
     private final Logger logger = LoggerFactory.getLogger(MongoConnection.class);
 
-    protected String strURI = "mongodb://guest:welcome1@localhost:27017/mydb";
-    protected DB mongoDB = null;
-    protected Mongo mongo = null;
-    protected DBCollection locations = null;
-    protected String mongoLocations = "locations";
+    private static boolean isInitialized = false;
+    private static String mongoURL = "";
+    
+    private DB mongoDB = null;
+    private Mongo mongo = null;
+    private DBCollection locations = null;
+    private String mongoLocations = "locations";
 
     public MongoConnection() {
+        if (! isInitialized) {
+            mongoURL = getMongoURL();
+            isInitialized = true;
+        }
+    }
+
+    private String getMongoURL() {
+        String useMongoURL = "mongodb://guest:welcome1@localhost:27017/mydb";
         String envMongoURL = null;
         String envBuildSecretDir = null;
-
-        // Get MONGOHQ_URL_GASP from 
-        // 1. Jenkins build secret plugin
-        // 2. System property ("MONGOHQ_URL_GASP");
-        // 3, System environment ("MONGOHQ_URL_GASP");
-        // 4. Default: Local MongoDB
+        
+        // Get MONGOHQ_URL_GASP from : 
         try {
-         // $MONGO_GASP_TEST has the location of the secret properties file
+            // 1. Jenkins build secret plugin
             if ((envBuildSecretDir = System.getenv("MONGO_GASP_TEST")) != null) {
                 logger.debug("MONGO_GASP_TEST = " + envBuildSecretDir);
                 FileInputStream propFile = new FileInputStream(envBuildSecretDir + "/" + "gasp-mongo.env");
                 Properties p = new Properties(System.getProperties());
                 p.load(propFile);
                 System.setProperties(p);
-                strURI = System.getProperty("MONGOHQ_URL_GASP");
+                useMongoURL = System.getProperty("MONGOHQ_URL_GASP");
                 logger.debug("MONGOHQ_URL_GASP (from Build Secret): " + System.getProperty("MONGOHQ_URL_GASP"));
             }
-            else { 
-                // Either: get MongoURL from system property
-                if ((envMongoURL = System.getProperty("MONGOHQ_URL_GASP")) != null) {
-                    logger.debug("Using MONGOHQ_URL_GASP system property: " + envMongoURL);
-                    strURI = envMongoURL;
-                }
-                // Or: get MongoURL from system environment
-                else if ((envMongoURL = System.getenv("MONGOHQ_URL_GASP")) != null){
-                    logger.debug("Using MONGOHQ_URL_GASP from system environment: " + envMongoURL);
-                    strURI = envMongoURL;
-                }
-                // Otherwise: default to (hard-coded) local MongoDB
-                else {
-                    logger.debug("Using default mongoURI: " + strURI);
-                }
+             
+            // 2. System property
+            else if ((envMongoURL = System.getProperty("MONGOHQ_URL_GASP")) != null) {
+                logger.debug("MONGOHQ_URL_GASP (from system property): " + envMongoURL);
+                useMongoURL = envMongoURL;
+            }
+            
+            // 3, System environment
+            else if ((envMongoURL = System.getenv("MONGOHQ_URL_GASP")) != null){
+                logger.debug("MONGOHQ_URL_GASP (from system environment): " + envMongoURL);
+                useMongoURL = envMongoURL;
+            }
+            
+            // 4. Default: Local MongoDB
+            else {
+                logger.debug("Using default mongoURI: " + useMongoURL);
             }
         }
         catch (Exception e){
             logger.error(e.getStackTrace().toString());
         }
+        return useMongoURL;
     }
-
+    
     public DB getMongoDB() {
         return mongoDB;
     }
@@ -83,7 +91,7 @@ public class MongoConnection {
     public void connect() throws Exception {
         try {
             // Connect to Mongo and Authenticate
-            MongoURI mongoURI = new MongoURI(strURI);
+            MongoURI mongoURI = new MongoURI(mongoURL);
             mongo = new Mongo(mongoURI);
             mongoDB = mongo.getDB(mongoURI.getDatabase());
             mongoDB.authenticate(mongoURI.getUsername(), mongoURI.getPassword());
