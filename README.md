@@ -2,7 +2,7 @@ GASP-MONGO
 ==========
 
 Geo-location search and storage for Gasp! project: mongoDB version.  Provides a short set of REST services that are useful for displaying locations on mobile devices using the Google Maps API.
-An example of the service is running on CloudBees at gasp-mongo.mqprichard.cloudbees.net using the integrated MongoDB service from MongoHQ.  It can also be run using a local MongoDB.
+See below for instructions on how to run this service on CloudBees using the integrated MongoDB service from MongoHQ.
 This is a Maven project, written in Java using the Google Geocoding API v3, MongoDB Geospatial Indexing and JAX-RS/JAX-B for the REST service implementation.  Please note the [usage limits and conditions of use](https://developers.google.com/maps/documentation/geocoding/#Limits) for the Google Geocoding API.  The project currently uses the MongoDB legacy 2D co-ordinate system: this is adequate for its intended use, but I will be updating to use the Mongo 2.4 geospatial query operators. 
 
 For more information, please see:
@@ -50,7 +50,7 @@ Android Client Notes
 
 The model classes are all in gasp-mongo/src/main/java/com/cloudbees/gasp/model.  Use LocationQuery/GeoSpatialQuery for the request body and GeoLocation/GeoLocation[] for the response.  Import these into your Android project and call the REST services as per the following example:
 
-    final String requestURI = "http://gasp-mongo.mqprichard.cloudbees.net/locations/geocenter";
+    final String requestURI = "http://gasp-mongo.partnerdemo.cloudbees.net/locations/geocenter";
     final String requestBody = "{\"center\" : {\"lng\" : -122.1139858 , \"lat\" : 37.3774655 }, \"radius\" : 0.005}";
     HttpClient httpClient = new DefaultHttpClient();
     HttpContext localContext = new BasicHttpContext();
@@ -81,7 +81,7 @@ Add new geocoded location
 -------------------------
 
 
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Cliff House","addressString":"1090 Point Lobos San Francisco CA 94121"}'
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/new -d '{"name":"Cliff House","addressString":"1090 Point Lobos San Francisco CA 94121"}'
 
 {"name":"Cliff House","formattedAddress":"1090 Point Lobos, San Francisco, CA 94121, USA","location":{"lat":37.7768388,"lng":-122.5120706}}
 
@@ -89,13 +89,13 @@ curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST h
 Remove a geocoded location
 --------------------------
 
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/remove -d '{"name":"Cliff House","addressString":"1090 Point Lobos San Francisco CA 94121"}'
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/remove -d '{"name":"Cliff House","addressString":"1090 Point Lobos San Francisco CA 94121"}'
 
 
 Get all locations
 -----------------
 
-curl -H "Accept: application/json" -X GET http://gasp-mongo.mqprichard.cloudbees.net/locations/get
+curl -H "Accept: application/json" -X GET http://gasp-mongo.partnerdemo.cloudbees.net/locations/get
 
 [{ "name" : "Cliff House" , "formattedAddress" : "1090 Point Lobos, San Francisco, CA 94121, USA" , "location" : { "lng" : -122.5120706 , "lat" : 37.7768388}}, { "name" : "Alices Restaurant" , "formattedAddress" : "17288 Skyline Boulevard, Woodside, CA 94062, USA" , "location" : { "lng" : -122.2649424 , "lat" : 37.3867203}}, { "name" : "Flea Street Cafe" , "formattedAddress" : "3607 Alameda De Las Pulgas, Menlo Park, CA 94025, USA" , "location" : { "lng" : -122.2011702 , "lat" : 37.4317999}}, { "name" : "The Dutch Goose" , "formattedAddress" : "3567 Alameda De Las Pulgas, Menlo Park, CA 94025, USA" , "location" : { "lng" : -122.2016498 , "lat" : 37.431867}}, { "name" : "Mikado Restaurant" , "formattedAddress" : "161 Main Street, Los Altos, CA 94022, USA" , "location" : { "lng" : -122.114929 , "lat" : 37.3793043}}, { "name" : "Sumika Grill" , "formattedAddress" : "236 Plaza Central, Los Altos, CA 94022, USA" , "location" : { "lng" : -122.1166286 , "lat" : 37.3791531}}, { "name" : "Peets Coffee" , "formattedAddress" : "367 State Street, Los Altos, CA 94022, USA" , "location" : { "lng" : -122.1179248 , "lat" : 37.3787929}}]
 
@@ -103,15 +103,15 @@ curl -H "Accept: application/json" -X GET http://gasp-mongo.mqprichard.cloudbees
 Geospatial query (centred search, radius in degrees)
 ----------------------------------------------------
 
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/geocenter -d '{"center" : {"lng" : -122.1139858 , "lat" : 37.3774655 }, "radius" : 0.005}'
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/geocenter -d '{"center" : {"lng" : -122.1139858 , "lat" : 37.3774655 }, "radius" : 0.005}'
 
 [{ "name" : "Sumika Grill" , "formattedAddress" : "236 Plaza Central, Los Altos, CA 94022, USA" , "location" : { "lng" : -122.1166286 , "lat" : 37.3791531}}, { "name" : "Mikado Restaurant" , "formattedAddress" : "161 Main Street, Los Altos, CA 94022, USA" , "location" : { "lng" : -122.114929 , "lat" : 37.3793043}}, { "name" : "Peets Coffee" , "formattedAddress" : "367 State Street, Los Altos, CA 94022, USA" , "location" : { "lng" : -122.1179248 , "lat" : 37.3787929}}]
 
 
-Lookup an address (returns text/plain - for development only)
+Lookup an address (for dev/test - returns text/plain)
 --------------------------------------------------------------------------------------
 
-curl -H "Accept: text/plain" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/lookup -d '{"name":"Cliff House","addressString":"1090 Point Lobos San Francisco CA 94121"}'
+curl -H "Accept: text/plain" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/lookup -d '{"name":"Cliff House","addressString":"1090 Point Lobos San Francisco CA 94121"}'
 
 GeocoderResult{types=[street_address], formattedAddress='1090 Point Lobos, San Francisco, CA 94121, USA', addressComponents=[GeocoderAddressComponent{longName='1090', shortName='1090', types=[street_number]}, GeocoderAddressComponent{longName='Point Lobos', shortName='Point Lobos', types=[route]}, GeocoderAddressComponent{longName='San Francisco', shortName='SF', types=[locality, political]}, GeocoderAddressComponent{longName='San Francisco', shortName='San Francisco', types=[administrative_area_level_2, political]}, GeocoderAddressComponent{longName='California', shortName='CA', types=[administrative_area_level_1, political]}, GeocoderAddressComponent{longName='United States', shortName='US', types=[country, political]}, GeocoderAddressComponent{longName='94121', shortName='94121', types=[postal_code]}], geometry=GeocoderGeometry{location=LatLng{lat=37.77683880, lng=-122.51207060}, locationType=RANGE_INTERPOLATED, viewport=LatLngBounds{southwest=LatLng{lat=37.77549521970850, lng=-122.5134133802915}, northeast=LatLng{lat=37.77819318029150, lng=-122.5107154197085}}, bounds=LatLngBounds{southwest=LatLng{lat=37.77683880, lng=-122.51207060}, northeast=LatLng{lat=37.77684960, lng=-122.51205820}}}, partialMatch=false}
 
@@ -119,20 +119,20 @@ GeocoderResult{types=[street_address], formattedAddress='1090 Point Lobos, San F
 Some sample data
 ----------------
 
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Cliff House","addressString":"1090 Point Lobos San Francisco CA 94121"}';
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/new -d '{"name":"Cliff House","addressString":"1090 Point Lobos San Francisco CA 94121"}';
 
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Alices Restaurant","addressString":"17288 Skyline Boulevard Woodside, CA"}';
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/new -d '{"name":"Alices Restaurant","addressString":"17288 Skyline Boulevard Woodside, CA"}';
 
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Flea Street Cafe","addressString":"3607 Alameda de las Pulgas Menlo Park, CA 94025"}';
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/new -d '{"name":"Flea Street Cafe","addressString":"3607 Alameda de las Pulgas Menlo Park, CA 94025"}';
 
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"The Dutch Goose","addressString":"3567 Alameda De Las Pulgas  Menlo Park, CA 94025"}';
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/new -d '{"name":"The Dutch Goose","addressString":"3567 Alameda De Las Pulgas  Menlo Park, CA 94025"}';
 
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Mikado Restaurant","addressString":"161 Main St  Los Altos, CA"}';
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/new -d '{"name":"Mikado Restaurant","addressString":"161 Main St  Los Altos, CA"}';
 
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Sumika Grill","addressString":"236 Central Plaza Los Altos, CA"}';
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/new -d '{"name":"Sumika Grill","addressString":"236 Central Plaza Los Altos, CA"}';
 
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Peets Coffee","addressString":"367 State Street, Los Altos"}';
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/new -d '{"name":"Peets Coffee","addressString":"367 State Street, Los Altos"}';
 
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Work","addressString":"289 S San Antonio, Los Altos 94022"}';
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/new -d '{"name":"Work","addressString":"289 S San Antonio, Los Altos 94022"}';
 
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.mqprichard.cloudbees.net/locations/new -d '{"name":"Home","addressString":"1285 Altschul Ave, Menlo Park, CA 94025"}';
+curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/new -d '{"name":"Home","addressString":"1285 Altschul Ave, Menlo Park, CA 94025"}';
