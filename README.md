@@ -134,5 +134,3 @@ curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST h
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/new -d '{"name":"Peets Coffee","addressString":"367 State Street, Los Altos"}';
 
 curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/new -d '{"name":"Work","addressString":"289 S San Antonio, Los Altos 94022"}';
-
-curl -H "Accept: application/json" -H "Content-Type: application/json" -X POST http://gasp-mongo.partnerdemo.cloudbees.net/locations/new -d '{"name":"Home","addressString":"1285 Altschul Ave, Menlo Park, CA 94025"}';
