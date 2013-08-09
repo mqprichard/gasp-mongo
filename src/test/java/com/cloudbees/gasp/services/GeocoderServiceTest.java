@@ -22,22 +22,22 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class GeocoderServiceTest {
-    private final String testName = "Home";
-    private final String testAddress = "1285 Altschul Ave, Menlo Park CA";
-    private final String testFormattedAddress = "1285 Altschul Avenue, Menlo Park, CA 94025, USA";
-    private final String testLat = "37.4315230";
-    private final String testLng = "-122.2064280";
 
     @Test
     public void geoLocationTest() {
+        String testName = "Home";
+        String testAddress = "1285 Altschul Ave, Menlo Park CA";
         LocationQuery location = new LocationQuery(testName, testAddress);
         GeocoderService geocoder = new GeocoderService();
 
         assertEquals(geocoder.callGeocoder(location), true);
+        String testFormattedAddress = "1285 Altschul Avenue, Menlo Park, CA 94025, USA";
         assertEquals(geocoder.getGeocoderResponse()
                              .getResults()
                              .get(0)
                              .getFormattedAddress(), testFormattedAddress);
+
+        String testLat = "37.4315230";
         assertEquals(geocoder.getGeocoderResponse()
                              .getResults()
                              .get(0)
@@ -45,6 +45,8 @@ public class GeocoderServiceTest {
                              .getLocation()
                              .getLat()
                              .toString(), testLat);
+        String testLng = "-122.2064280";
+
         assertEquals(geocoder.getGeocoderResponse()
                              .getResults()
                              .get(0)

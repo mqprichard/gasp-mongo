@@ -26,13 +26,14 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.StatusType;
+import java.util.Arrays;
 
 @Path("/locations")
 public class LocationService extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private final Logger logger = LoggerFactory.getLogger(LocationService.class);
-    private MongoConnection mongoConnection = new MongoConnection();
+    private final MongoConnection mongoConnection = new MongoConnection();
 
     @POST
     @Path("/new")
@@ -126,7 +127,7 @@ public class LocationService extends HttpServlet {
                 logger.debug("Geocoder Result: " + geoResult);
 
                 return Response.status(Response.Status.OK)
-                        .entity(geoResult.toString()).build();
+                        .entity(geoResult).build();
             }
             else {
                 return Response.status(geocoder.getErrorCode()).build();
@@ -151,7 +152,7 @@ public class LocationService extends HttpServlet {
             statusCode = Response.Status.OK;
         }
         catch (Exception e) {
-            logger.error("getLocations()" + e.getStackTrace());
+            logger.error("getLocations()" + Arrays.toString(e.getStackTrace()));
             statusCode = Response.Status.INTERNAL_SERVER_ERROR;
         }
         finally {

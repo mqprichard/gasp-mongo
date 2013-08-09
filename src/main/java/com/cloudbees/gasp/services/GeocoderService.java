@@ -26,9 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.Response;
-import java.util.Iterator;
 
-public class GeocoderService {
+class GeocoderService {
     private final Logger logger = LoggerFactory.getLogger(GeocoderService.class);
     private final Geocoder geocoder = new Geocoder();
     private Response.StatusType errorCode = null;
@@ -109,13 +108,11 @@ public class GeocoderService {
                         .getLocation());
 
         if (logger.isDebugEnabled()) {
-            Iterator<GeocoderAddressComponent> iterator = geocoderResponse
-                    .getResults().get(0).getAddressComponents().iterator();
-            while (iterator.hasNext()) {
-                GeocoderAddressComponent addressComponent = iterator.next();
+            for (GeocoderAddressComponent addressComponent : geocoderResponse
+                    .getResults().get(0).getAddressComponents()) {
                 logger.debug("Address Component ["
-                             + addressComponent.getTypes().get(0) + "] = "
-                             + addressComponent.getShortName());
+                        + addressComponent.getTypes().get(0) + "] = "
+                        + addressComponent.getShortName());
             }
         }
     }

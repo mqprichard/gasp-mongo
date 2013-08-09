@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -34,7 +35,6 @@ public class MongoConnection {
     private DB mongoDB = null;
     private Mongo mongo = null;
     private DBCollection locations = null;
-    private String mongoLocations = "locations";
 
     public MongoConnection() {
         if (! isInitialized) {
@@ -45,8 +45,8 @@ public class MongoConnection {
 
     private String getMongoURL() {
         String useMongoURL = "";
-        String envMongoURL = null;
-        String envBuildSecretDir = null;
+        String envMongoURL;
+        String envBuildSecretDir;
         
         // Get MONGOHQ_URL_GASP from : 
         try {
@@ -79,12 +79,12 @@ public class MongoConnection {
             }
         }
         catch (Exception e){
-            logger.error(e.getStackTrace().toString());
+            logger.error(Arrays.toString(e.getStackTrace()));
         }
         return useMongoURL;
     }
     
-    public DB getMongoDB() {
+    DB getMongoDB() {
         return mongoDB;
     }
 
@@ -92,7 +92,7 @@ public class MongoConnection {
         return mongo;
     }
 
-    public DBCollection getCollection() {
+    DBCollection getCollection() {
         return locations;
     }
 
@@ -105,6 +105,7 @@ public class MongoConnection {
             mongoDB.authenticate(mongoURI.getUsername(), mongoURI.getPassword());
 
             // Get Mongo collections and set WriteConcern
+            String mongoLocations = "locations";
             locations = getMongoDB().getCollection(mongoLocations);
             mongoDB.setWriteConcern(WriteConcern.SAFE);
         }
